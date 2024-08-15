@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+
+<properties>
+<!--./logs=refers to logs folder in current project-->
+<!--basePath is a variable-->
+
+<property name="basePath">./logs</property>
+</properties>
+
+
+  <Appenders>
+  <!--Console to see logs-->
+    <Console name="Console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    </Console>
+    <!--File location to save logs -->
+    <RollingFile name="File" fileName="${basePath}/automation.log"
+                 filePattern="${basePath}/automation-%d{yyyy-MM-dd}.log"><!--We save log fiel with timestamp as if size exceeds,it will create anothe file automatically-->
+             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+             <SizeBasedTriggeringPolicy size="5000" /><!--File size-->
+                 </RollingFile>
+  </Appenders>
+  
+  
+  <Loggers>
+    <Root level="INFO"><!--Set level of log-->
+    <AppenderRef ref="Console"/> <!--displays logs in console-->
+     <!-- <AppenderRef ref="File"/>--><!--save logs in file-->
+    </Root>
+    </Loggers>
+</Configuration> 
+   
+ 
