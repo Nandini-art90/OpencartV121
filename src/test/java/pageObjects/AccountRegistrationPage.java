@@ -1,126 +1,111 @@
 package pageObjects;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import pageObjects.BasePage;
-
 public class AccountRegistrationPage extends BasePage{
 	
-	public AccountRegistrationPage(WebDriver driver )
+	public AccountRegistrationPage(WebDriver driver)
 	{
 		super(driver);
 	}
 	
-	//Capture elements in registration page
-	
-	//capture firstname
-	@FindBy(xpath="//input[@id='input-firstname']")
-	WebElement Firstname;
-	
-	//capture lasttname
-		@FindBy(xpath="//input[@id='input-lastname']")
-		WebElement lasttname;
-	
-	//capture email
-		@FindBy(xpath="//input[@id='input-email']")
-		WebElement email;		
-			
-	//capture telephone
-		@FindBy(xpath="//input[@id='input-telephone']")
-		WebElement telephone;		
-	
-	//capture password
-		@FindBy(xpath="//input[@id='input-password']")
-		WebElement pwd;
-		
-	//capture confirm password
-		@FindBy(xpath="//input[@id='input-confirm']")
-		WebElement pwd_cnfm;
-		
-	//capture policy items checkbox
-		@FindBy(xpath="//input[@name='agree']")
-		WebElement ckdPolicy;
-		
-	//capture continue button
-		@FindBy(xpath="//input[@value='Continue']")
-		WebElement btnContinu;
-		
-	//capture msg confirmation
-		@FindBy(xpath="//h1[normalize-space()='Your Account Has Been Created!']")
-		WebElement msgconfmtin;
 
-  //action methods
-		//set first name
-		public void setFirstName(String fname)
-		{
-			Firstname.sendKeys(fname);
-		}
-		
-		//set first name
-		public void setLasttName(String lname)
-		{
-			lasttname.sendKeys(lname);
-		}
-		
-		//set first name
-		public void email(String mail)
-		{
-			email.sendKeys(mail);
-		}
-		
-		//set telephone
-		public void settelephone(String tele)
-		{
-			telephone.sendKeys(tele);
-		}
-		
-		//set password
-		public void setPassword(String pwd1)
-		{
-			pwd.sendKeys(pwd1);
-		}
-			
-		//set confirm password.(both passwords of setPassword and setcofirmpwd)
-		public void setcofirmpwd(String pwd1)
-		{
-			pwd_cnfm.sendKeys(pwd1);
-		}
+@FindBy(xpath="//input[@id='input-firstname']") 
+WebElement txtFirstname;
 
-		
-		public void setPrivacyPolicy()
-		{
-			ckdPolicy.click();
-		}
-		
-		public void clickContnue()
-		{
-			btnContinu.click();
-		}
+@FindBy(xpath="//input[@id='input-lastname']") 
+WebElement txtLasttname;
+
+@FindBy(xpath="//input[@id='input-email']") 
+WebElement txtEmail;
+
+@FindBy(xpath="//input[@id='input-telephone']") 
+WebElement txtTelephone;
+
+@FindBy(xpath="//input[@id='input-password']") 
+WebElement txtPassword;
+
+@FindBy(xpath="//input[@id='input-confirm']") 
+WebElement txtConfirmPassword;
+
+@FindBy(xpath="//input[@name='agree']") 
+WebElement chkdPolicy;
+
+@FindBy(xpath="//input[@value='Continue']") 
+WebElement btnContinue;
+
+@FindBy(xpath = "//h1[normalize-space()='Your Account Has Been Created!']")
+WebElement msgConfirmation;
+
+
+public void setFirstName(String fname) {
+	txtFirstname.sendKeys(fname);
+
+}
+
+public void setLastName(String lname) {
+	txtLasttname.sendKeys(lname);
+
+}
+
+public void setEmail(String email) {
+	txtEmail.sendKeys(email);
+
+}
+
+public void setTelephone(String tel) {
+	txtTelephone.sendKeys(tel);
+
+}
+
+public void setPassword(String pwd) {
+	txtPassword.sendKeys(pwd);
+
+}
+
+public void setConfirmPassword(String pwd) {
+	txtConfirmPassword.sendKeys(pwd);
+
+}
+
+public void setPrivacyPolicy() {
+	chkdPolicy.click();
+
+}
+
+public void clickContinue() {
+	//sol1 
+	btnContinue.click();
+	
+	//sol2 
+	//btnContinue.submit();
+	
+	//sol3
+	//Actions act=new Actions(driver);
+	//act.moveToElement(btnContinue).click().perform();
 				
+	//sol4
+	//JavascriptExecutor js=(JavascriptExecutor)driver;
+	//js.executeScript("arguments[0].click();", btnContinue);
 	
-	public String getConfirmationMsg()
-	{
-		try
-		{
-			return (msgconfmtin.getText());
-		}
-		catch(Exception e)
-					{
-				       return (e.getMessage());
-					}
-		}
-	}
+	//Sol 5
+	//btnContinue.sendKeys(Keys.RETURN);
 	
+	//Sol6  
+	//WebDriverWait mywait = new WebDriverWait(driver, Duration.ofSeconds(10));
+	//mywait.until(ExpectedConditions.elementToBeClickable(btnContinue)).click();
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+}
 
+public String getConfirmationMsg() {
+	try {
+		return (msgConfirmation.getText());
+	} catch (Exception e) {
+		return (e.getMessage());
+
+	}
+
+}
+}

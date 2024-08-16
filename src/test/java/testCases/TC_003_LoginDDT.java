@@ -37,7 +37,7 @@ public class TC_003_LoginDDT extends BaseClass {
 				
 				//Verify myaccount
 				MyAccountPage macc=new MyAccountPage(driver);
-				boolean targetpage=macc.isMyAccountPageExist();
+				boolean targetpage=macc.isMyAccountPageExists();
 				//Assert.assertEquals(targetpage, true);//If page exist,returns true else return"login failed"
 				//Assert.assertTrue(targetpage);//same as above
 				

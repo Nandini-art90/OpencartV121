@@ -1,5 +1,6 @@
 package utilities;
 
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -15,206 +16,140 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ExcelUtility {
-	
+
 	public FileInputStream fi;
 	public FileOutputStream fo;
 	public XSSFWorkbook workbook;
 	public XSSFSheet sheet;
 	public XSSFRow row;
 	public XSSFCell cell;
-	public CellStyle style;
+	public CellStyle style;   
 	String path;
 	
-	
-	//To capture excel file/sheet location/path automatically
 	public ExcelUtility(String path)
 	{
 		this.path=path;
 	}
+		
+	public int getRowCount(String sheetName) throws IOException 
+	{
+		fi=new FileInputStream(path);
+		workbook=new XSSFWorkbook(fi);
+		sheet=workbook.getSheet(sheetName);
+		int rowcount=sheet.getLastRowNum();
+		workbook.close();
+		fi.close();
+		return rowcount;		
+	}
 	
-	
-	//To get row count
-	public  int getRowCount(String sheetName) throws IOException//Method to get total number of rows in workbook
-	{//String xfile=Location of the excel file/workbook
-		//String xsheet=Location of the sheet in the workbook
-		fi=new FileInputStream(path);//Opens excel file
-		workbook=new XSSFWorkbook(fi);//opens workbook
-		sheet=workbook.getSheet(sheetName);//opens mentioned sheet
-		int rowcount=sheet.getLastRowNum();//returns last row number which is equal to taotal number of rows
-		workbook.close();//closes workbook
-	     fi.close();//closes file
-	     return rowcount;//returns total number of rows
-	
+	public int getCellCount(String sheetName,int rownum) throws IOException
+	{
+		fi=new FileInputStream(path);
+		workbook=new XSSFWorkbook(fi);
+		sheet=workbook.getSheet(sheetName);
+		row=sheet.getRow(rownum);
+		int cellcount=row.getLastCellNum();
+		workbook.close();
+		fi.close();
+		return cellcount;
 	}
 	
 	
-	//To get column count
-	public  int getCellCount(String sheetName,int rownum) throws IOException//Method to get total number of cells in a row
-	{//String xfile=Location of the excel file/workbook
-		//String xsheet=Location of the sheet in the workbook//int rownum=rownumber in which we want cell count
-		fi=new FileInputStream(path);//Opens excel file
-		workbook=new XSSFWorkbook(fi);//opens workbook
-		sheet=workbook.getSheet(sheetName);//opens mentioned sheet
-		row=sheet.getRow(rownum);//Gets row number
-		int cellcount=row.getLastCellNum();//returns last row number which is equal to taotal number of rows
-		workbook.close();//closes workbook
-	     fi.close();//closes file
-	     return cellcount;//returns total number of rows
-	
-	}
-	
-	//To get cell data
-	public  String getCellData(String sheetName,int rownum,int colnum) throws IOException//Method to read data from cell
-	{//String xfile=Location of the excel file/workbook
-		//String xsheet=Location of the sheet in the workbook//int rownum=rownumber in which we want cell count
-		fi=new FileInputStream(path);//Opens excel file
-		workbook=new XSSFWorkbook(fi);//opens workbook
-		sheet=workbook.getSheet(sheetName);//opens mentioned sheet
-		row=sheet.getRow(rownum);//Gets row number
-		cell=row.getCell(colnum);//gets column number
+	public String getCellData(String sheetName,int rownum,int colnum) throws IOException
+	{
+		fi=new FileInputStream(path);
+		workbook=new XSSFWorkbook(fi);
+		sheet=workbook.getSheet(sheetName);
+		row=sheet.getRow(rownum);
+		cell=row.getCell(colnum);
 		
-	
-		DataFormatter formatter=new DataFormatter();//class from apache api to read data from cell.
-		
+		DataFormatter formatter = new DataFormatter();
 		String data;
-		try
-		{
-			
-			
-			data=formatter.formatCellValue(cell);//Reads any data cell  in the form of string.It is similar to tostring
-			
-			
+		try{
+		data = formatter.formatCellValue(cell); //Returns the formatted value of a cell as a String regardless of the cell type.
 		}
 		catch(Exception e)
 		{
-			data=" ";//to catch datanotfoundexception if cell is null(" "=empty string)
+			data="";
 		}
 		workbook.close();
 		fi.close();
 		return data;
-	
 	}
 	
-	public  void setCellData(String xfile,String sheetName,int rownum,int colnum,String data) throws IOException//Method to write  data into the cell
+	public void setCellData(String sheetName,int rownum,int colnum,String data) throws IOException
 	{
-		//To verify file exist or not
 		File xlfile=new File(path);
-		if(xlfile.exists())
+		if(!xlfile.exists())    // If file not exists then create new file
 		{
-			workbook=new XSSFWorkbook(fi);//opens workbook
-			fo=new FileOutputStream(path);
-			workbook.write(fo);
-		}
-		
-		fi=new FileInputStream(path);//Opens excel file
-		workbook=new XSSFWorkbook(fi);
-		if(workbook.getSheetIndex(sheetName)==-1)//If sheet not exist ,then create new sheet
-		{
-			workbook.createSheet(sheetName);
-			sheet=workbook.getSheet(sheetName);
-		}
-		
-		if(sheet.getRow(rownum)==null)//If row not exist,create new row
-		{
-			sheet.createRow(rownum);
-			row=sheet.getRow(rownum);
-		}
-		
-		
-		//Write data
-		cell=row.createCell(colnum);//gets column number
-		cell.setCellValue(data);//writes data into cell
+		workbook=new XSSFWorkbook();
 		fo=new FileOutputStream(path);
 		workbook.write(fo);
+		}
+				
+		fi=new FileInputStream(path);
+		workbook=new XSSFWorkbook(fi);
+			
+		if(workbook.getSheetIndex(sheetName)==-1) // If sheet not exists then create new Sheet
+			workbook.createSheet(sheetName);
+		sheet=workbook.getSheet(sheetName);
+					
+		if(sheet.getRow(rownum)==null)   // If row not exists then create new Row
+				sheet.createRow(rownum);
+		row=sheet.getRow(rownum);
 		
+		cell=row.createCell(colnum);
+		cell.setCellValue(data);
+		fo=new FileOutputStream(path);
+		workbook.write(fo);		
 		workbook.close();
 		fi.close();
 		fo.close();
-		
 	}
 	
 	
-	//To set red colour to cell
-	public void FillGreenColor(String sheetName,int rownum,int colnum) throws IOException//Method to fill cell with color(green)
-	{//String xfile=Location of the excel file/workbook
-		//String xsheet=Location of the sheet in the workbook//int rownum=rownumber in which we want cell count
-		//int colnum=cell number in which we want to write the data.String data=Data we want to pass to cell
-		fi=new FileInputStream(path);//Opens excel file
-		workbook=new XSSFWorkbook(fi);//opens workbook
-		sheet=workbook.getSheet(sheetName);//opens mentioned sheet
-		row=sheet.getRow(rownum);//Gets row number
+	public void fillGreenColor(String sheetName,int rownum,int colnum) throws IOException
+	{
+		fi=new FileInputStream(path);
+		workbook=new XSSFWorkbook(fi);
+		sheet=workbook.getSheet(sheetName);
+		
+		row=sheet.getRow(rownum);
 		cell=row.getCell(colnum);
+		
 		style=workbook.createCellStyle();
+		
 		style.setFillForegroundColor(IndexedColors.GREEN.getIndex());
-		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+		style.setFillPattern(FillPatternType.SOLID_FOREGROUND); 
+				
 		cell.setCellStyle(style);
-		
 		workbook.write(fo);
 		workbook.close();
 		fi.close();
 		fo.close();
-		
 	}
 	
 	
-	//To set red colour to cell
-	public void FillRedColor(String sheetName,int rownum,int colnum) throws IOException//Method to fill cell with color(green)
-	{//String xfile=Location of the excel file/workbook
-		//String xsheet=Location of the sheet in the workbook//int rownum=rownumber in which we want cell count
-		//int colnum=cell number in which we want to write the data.String data=Data we want to pass to cell
-		fi=new FileInputStream(path);//Opens excel file
-		workbook=new XSSFWorkbook(fi);//opens workbook
-		sheet=workbook.getSheet(sheetName);//opens mentioned sheet
-		row=sheet.getRow(rownum);//Gets row number
+	public void fillRedColor(String sheetName,int rownum,int colnum) throws IOException
+	{
+		fi=new FileInputStream(path);
+		workbook=new XSSFWorkbook(fi);
+		sheet=workbook.getSheet(sheetName);
+		row=sheet.getRow(rownum);
 		cell=row.getCell(colnum);
-		style=workbook.createCellStyle();
-		style.setFillForegroundColor(IndexedColors.RED.getIndex());
-		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-		cell.setCellStyle(style);
 		
+		style=workbook.createCellStyle();
+		
+		style.setFillForegroundColor(IndexedColors.RED.getIndex());
+		style.setFillPattern(FillPatternType.SOLID_FOREGROUND);  
+		
+		cell.setCellStyle(style);		
 		workbook.write(fo);
 		workbook.close();
 		fi.close();
 		fo.close();
-		
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
 }
+
+

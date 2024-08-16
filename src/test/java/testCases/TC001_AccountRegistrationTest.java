@@ -1,6 +1,5 @@
 package testCases;
 
-import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -8,77 +7,58 @@ import pageObjects.AccountRegistrationPage;
 import pageObjects.HomePage;
 import testBase.BaseClass;
 
-public class TC001_AccountRegistrationTest extends BaseClass{
+public class TC001_AccountRegistrationTest extends BaseClass {
 	
-	
-	 @Test(groups={"Regression","Master"})
+	@Test(groups={"Regression","Master"})
 	public void verify_account_registration()
 	{
-		 logger.info("****Starting TC001_AccountRegistrationTest****");//Info level log .Information like comment
+		logger.info("***** Starting TC001_AccountRegistrationTest  ****");
+		logger.debug("This is a debug log message");
 		try
 		{
-		 HomePage hp=new HomePage(driver);//create homepage class.driver will be passed
-		//to page objects class 
+		HomePage hp=new HomePage(driver);
 		hp.clickMyAccount();
-		logger.info("Clicked on myaccount link");
+		logger.info("Clicked on MyAccount Link.. ");
+		
 		hp.clickRegister();
-		logger.info("Clicked on register link");
+		logger.info("Clicked on Register Link.. ");
 		
-		AccountRegistrationPage regpage= new AccountRegistrationPage(driver);
+		AccountRegistrationPage regpage=new AccountRegistrationPage(driver);
 		
-		logger.info("Providing customer details..");
+		logger.info("Providing customer details...");
 		regpage.setFirstName(randomeString().toUpperCase());
-		regpage.setLasttName(randomeString().toUpperCase());
-		regpage.email(randomeString()+"@gmail.com");
-		regpage.settelephone(randomeNumber());
-		String password=randomeAlphanumeric();//To store same random data in string so that password and confirm password should accept same
+		regpage.setLastName(randomeString().toUpperCase());
+		regpage.setEmail(randomeString()+"@gmail.com");// randomly generated the email
+		regpage.setTelephone(randomeNumber());
+			
+		String password=randomeAlphaNumberic();
+			
 		regpage.setPassword(password);
-		regpage.setcofirmpwd(password);
+		regpage.setConfirmPassword(password);
+		
 		regpage.setPrivacyPolicy();
-		regpage.clickContnue();
+		regpage.clickContinue();
 		
 		logger.info("Validating expected message..");
-		String cnfmsg=regpage.getConfirmationMsg();
-		System.out.println(cnfmsg);
-		if(cnfmsg.equals("Your Account Has Been Created!"))//Failing intentionally
-		{
-			logger.info("Test passed..."); 
-			Assert.assertTrue(true);
-		}
 		
-		//Assert.assertEquals(cnfmsg, "Your Account Has Been Created!!!");//We can write this as well instead of if
-		else
+		String confmsg = regpage.getConfirmationMsg();
+		Assert.assertEquals(confmsg, "Your Account Has Been Created!", "Confirmation message mismatch");
+
+		logger.info("Test passed");
+		} 
+		catch (Exception e)
 		{
-			logger.error("Test failed..."); 
-			logger.debug("Debug logs..."); //debug level log
-			Assert.assertTrue(false);
+			logger.error("Test failed: " + e.getMessage());
+			Assert.fail("Test failed: " + e.getMessage());
+		} 
+		finally 
+		{
+		logger.info("***** Finished TC001_AccountRegistrationTest *****");
 		}
+	
 	}
 	
-	 catch(Exception e)
-	 {
-		
-		Assert.fail();//test method fails
-	 }
-		 logger.info("****Starting TC001_AccountRegistratinTest Finished***");	
-	}
-	 
 	
-} 
-	 
-
-
-
-	  	
-		
-		
 	
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-
+	
+}

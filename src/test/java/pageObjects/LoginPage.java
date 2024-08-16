@@ -5,47 +5,34 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 public class LoginPage extends BasePage {
-public LoginPage(WebDriver driver)
-{
-super(driver);
+
+	public LoginPage(WebDriver driver) {
+		super(driver);
+	}
+
+	@FindBy(xpath = "//input[@id='input-email']")
+	WebElement txtEmailAddress;
+
+	@FindBy(xpath = "//input[@id='input-password']")
+	WebElement txtPassword;
+
+	@FindBy(xpath = "//input[@value='Login']")
+	WebElement btnLogin;
+
+
+	public void setEmail(String email) {
+		txtEmailAddress.sendKeys(email);
+	}
+
+	public void setPassword(String pwd) {
+		txtPassword.sendKeys(pwd);
+	}
+
+	public void clickLogin() {
+		btnLogin.click();
+	}
+
+	
+	
+	
 }
-
-@FindBy(xpath="//input[@id='input-email']")
-WebElement txt_emailaddress;
-
-@FindBy(xpath="//input[@id='input-password']")
-WebElement txt_password;
-
-@FindBy(xpath="//input[@value='Login']")
-WebElement btn_Login;
-
-public void setEmail(String email)
-{
-	txt_emailaddress.sendKeys(email);
-}
-public void setPassword(String pwd)
-{
-	txt_password.sendKeys(pwd);
-}
-public void clickLogin()
-{
-	btn_Login.click();
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
-
-
